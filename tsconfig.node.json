@@ -6,7 +6,8 @@
     "cypress.config.*",
     "nightwatch.conf.*",
     "playwright.config.*",
-    "eslint.config.*"
+    "eslint.config.*",
+    "mock/**/*.ts"
   ],
   "compilerOptions": {
     "noEmit": true,

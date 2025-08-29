@@ -54,8 +54,8 @@ const auth = useAuth()
 const email = ref('')
 const password = ref('')
 
-const handleLogin = () => {
-  auth.signIn({ email: email.value, password: password.value })
+const handleLogin = async () => {
+  await auth.signIn({ email: email.value, password: password.value })
 }
 </script>
 
