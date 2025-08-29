@@ -1,25 +1,12 @@
 <template>
   <button
-    class="relative p-2 rounded-full hover:bg-gray-100 transition"
+    class="w-10 h-10 relative rounded-full hover:bg-gray-100 hover:cursor-pointer transition flex items-center justify-center"
     aria-label="Корзина"
   >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      class="h-6 w-6 text-gray-700"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-    >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.35 2.7a1 1 0 00.9 1.5h12.9M7 13L5.4 5M16 16a2 2 0 11-4 0"
-      />
-    </svg>
+    <ShoppingCartIcon class="h-6 w-6 text-gray-700" />
 
     <span
-      class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-semibold rounded-full px-1.5"
+      class="absolute top-0 right-0 bg-red-500 text-white text-xs font-semibold rounded-full px-1.5"
     >
       3
     </span>
@@ -27,9 +14,7 @@
 </template>
 
 <script setup lang="ts">
-
+import { ShoppingCartIcon } from '@heroicons/vue/24/outline'
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

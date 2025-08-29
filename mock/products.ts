@@ -5,7 +5,7 @@ import { ProductsListRequest } from './types/products'
 import { checkAuth } from './guqrds/auth'
 
 async function sendAllProducts(params: ProductsListRequest, res: ServerResponse) {
-  const { page, limit = 20 } = params
+  const { page = 1, limit = 20 } = params
 
   res.statusCode = 200
   res.end(
