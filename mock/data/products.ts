@@ -78,7 +78,7 @@ function generateNames(count: number): string[] {
 export const products: Product[] = generateNames(getRandomInt(50, 100)).map((name, i) => ({
   id: i + 1,
   name,
-  price: getRandomInt(500, 15000),
+  price: getRandomInt(50, 1500),
   rarity: rarities[getRandomInt(0, rarities.length - 1)],
   inStock: Math.random() > 0.2,
   tags: randomTags(),

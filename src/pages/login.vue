@@ -48,14 +48,17 @@
 <script setup lang="ts">
 import { useAuth } from '@/composables/useAuth'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 const auth = useAuth()
+const router = useRouter()
 
 const email = ref('')
 const password = ref('')
 
 const handleLogin = async () => {
   await auth.signIn({ email: email.value, password: password.value })
+  router.push({ name: 'catalog' })
 }
 </script>
 

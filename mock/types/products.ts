@@ -9,3 +9,21 @@ export interface Product {
   tags: string[]
   image: string
 }
+
+export interface ProductsListRequest {
+  q: string
+  min: number
+  max: number
+  inStock: boolean
+  rarity: Rarity
+  sort: 'price_asc' | 'price_desc'
+  page: number
+  limit: number
+}
+
+export interface ProductsListResponse {
+  items: Product[]
+  total: number
+  page: number
+  limit: number
+}

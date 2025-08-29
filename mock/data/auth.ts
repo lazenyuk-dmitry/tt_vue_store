@@ -1,0 +1,1 @@
+export const validToken = 'FAKE_TOKEN_123'
