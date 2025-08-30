@@ -1,6 +1,7 @@
 import type { IncomingMessage, ServerResponse } from 'http'
 import { parseRawRequest } from './utils'
 import { validToken, user, password as userPassword } from './data/auth'
+import { MockMethod } from 'vite-plugin-mock'
 
 export default [
   {
@@ -39,9 +40,7 @@ export default [
       res.setHeader('Content-Type', 'application/json')
 
       res.statusCode = 200
-      res.end(
-        JSON.stringify(user),
-      )
+      res.end(JSON.stringify(user))
     },
   },
-]
+] as MockMethod[]

@@ -27,12 +27,7 @@
           />
         </div>
 
-        <button
-          type="submit"
-          class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition"
-        >
-          Войти
-        </button>
+        <AppButton type="submit">Войти</AppButton>
       </form>
 
       <p class="text-sm text-gray-500 text-center mt-4">
@@ -46,6 +41,7 @@
 </template>
 
 <script setup lang="ts">
+import AppButton from '@/components/AppButton.vue'
 import { useAuth } from '@/composables/useAuth'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
