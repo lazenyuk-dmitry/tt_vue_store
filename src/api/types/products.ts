@@ -1,12 +1,13 @@
 import type { Rarity } from '../../../mock/types/products'
 
 export interface ProductItem {
-  id: 'knife_001'
-  name: 'Crimson Edge'
-  price: 129.99
-  qty: 2
-  image: '/images/knife_001.png'
-  inStock: true
+  id: number
+  name: string
+  price: number
+  rarity: Rarity
+  inStock: boolean
+  tags: string[]
+  image: string
 }
 
 export interface ProductsListResponse {
