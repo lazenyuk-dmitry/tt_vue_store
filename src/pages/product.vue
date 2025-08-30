@@ -19,7 +19,7 @@
             Редкость:
             <span class="font-medium capitalize">{{ product.rarity }}</span>
           </p>
-          <p class="text-3xl font-semibold mb-4">{{ product.price }} ₸</p>
+          <p class="text-3xl font-semibold mb-4">{{ product.price }}$</p>
 
           <p class="mb-4" :class="product.inStock ? 'text-green-600' : 'text-red-500'">
             {{ product.inStock ? 'В наличии' : 'Нет в наличии' }}

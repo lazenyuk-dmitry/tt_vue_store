@@ -1,6 +1,6 @@
 import type { IncomingMessage, ServerResponse } from 'http'
 import { parseRawRequest } from './utils'
-import { validToken } from './data/auth'
+import { validToken, user, password as userPassword } from './data/auth'
 
 export default [
   {
@@ -12,17 +12,12 @@ export default [
 
       res.setHeader('Content-Type', 'application/json')
 
-      if (email === 'test@test.com' && password === '123456') {
+      if (email === user.email && password === userPassword) {
         res.statusCode = 200
         res.end(
           JSON.stringify({
             token: validToken,
-            user: {
-              id: 1,
-              name: 'Test User',
-              email,
-              avatar: `https://i.pravatar.cc/150?u=${1}`,
-            },
+            user,
           }),
         )
 
@@ -40,15 +35,13 @@ export default [
   {
     url: '/api/userinfo',
     method: 'get',
-    response: () => {
-      return {
-        code: 0,
-        data: {
-          id: 1,
-          name: 'Test User',
-          email: 'test@test.com',
-        },
-      }
+    rawResponse: async (req: IncomingMessage, res: ServerResponse) => {
+      res.setHeader('Content-Type', 'application/json')
+
+      res.statusCode = 200
+      res.end(
+        JSON.stringify(user),
+      )
     },
   },
 ]

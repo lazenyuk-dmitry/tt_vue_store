@@ -1,5 +1,5 @@
 import http from '../http'
-import type { LoginRequest, LoginResponse } from '../types/auth'
+import type { LoginRequest, LoginResponse, UserInfo } from '../types/auth'
 
 export async function login(data: LoginRequest): Promise<LoginResponse> {
   const res = await http.post('/login', data)
@@ -7,5 +7,11 @@ export async function login(data: LoginRequest): Promise<LoginResponse> {
 }
 
 export async function logout(): Promise<void> {
-  await http.post('/logout')
+  const res = await http.post('/logout')
+  return res.data
+}
+
+export async function getUserInfo(): Promise<UserInfo> {
+  const res = await http.get('/userinfo')
+  return res.data
 }

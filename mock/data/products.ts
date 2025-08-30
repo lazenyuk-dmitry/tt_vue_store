@@ -10,7 +10,18 @@ const rarities: Rarity[] = [
   'covert',
 ]
 
-const tags = ['новинка', 'скидка', 'хит', 'ограниченный тираж', 'распродажа']
+const tags = [
+  'rare',
+  'vintage',
+  'collectible',
+  'premium',
+  'exclusive',
+  'steel',
+  'tactical',
+  'survival',
+  'decorative',
+  'training',
+]
 
 function randomTags(): string[] {
   return tags.sort(() => Math.random() - 0.5).slice(0, getRandomInt(0, 3))
@@ -78,7 +89,7 @@ function generateNames(count: number): string[] {
 export const products: Product[] = generateNames(getRandomInt(50, 100)).map((name, i) => ({
   id: i + 1,
   name,
-  price: getRandomInt(50, 1500),
+  price: getRandomInt(20, 1000),
   rarity: rarities[getRandomInt(0, rarities.length - 1)],
   inStock: Math.random() > 0.2,
   tags: randomTags(),

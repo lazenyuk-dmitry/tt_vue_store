@@ -1,7 +1,7 @@
 import http from '../http'
 import type { ProductItem, ProductsListParams, ProductsListResponse } from '../types/products'
 
-export async function getAllProducts(params: ProductsListParams): Promise<ProductsListResponse> {
+export async function getAllProducts(params?: ProductsListParams): Promise<ProductsListResponse> {
   const res = await http.get('/products', { params })
   return res.data
 }
