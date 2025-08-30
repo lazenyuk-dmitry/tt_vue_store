@@ -1,5 +1,6 @@
 <template>
-  <button
+  <RouterLink
+    to="/cart"
     class="w-10 h-10 relative rounded-full hover:bg-gray-100 hover:cursor-pointer transition flex items-center justify-center"
     aria-label="Корзина"
   >
@@ -10,7 +11,7 @@
     >
       3
     </span>
-  </button>
+  </RouterLink>
 </template>
 
 <script setup lang="ts">
