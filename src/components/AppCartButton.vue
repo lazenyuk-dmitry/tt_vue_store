@@ -9,13 +9,16 @@
     <span
       class="absolute top-0 right-0 bg-red-500 text-white text-xs font-semibold rounded-full px-1.5"
     >
-      3
+      {{ cart.totalItems }}
     </span>
   </RouterLink>
 </template>
 
 <script setup lang="ts">
+import { useCart } from '@/store/useCart'
 import { ShoppingCartIcon } from '@heroicons/vue/24/outline'
+
+const cart = useCart()
 </script>
 
 <style scoped></style>

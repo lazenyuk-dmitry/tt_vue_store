@@ -48,16 +48,17 @@ import type { ProductItem } from '@/api/types/products'
 import { toRefs } from 'vue'
 import AppProductCounter from './AppProductCounter.vue'
 import AppButton from './AppButton.vue'
-import { addToCart } from '@/api/endpoints/cart'
+import { useCart } from '@/store/useCart'
 
 const props = defineProps<{
   product: ProductItem
 }>()
 
 const { product } = toRefs(props)
+const cart = useCart();
 
 const add = async () => {
-  await addToCart({
+  await cart.add({
     id: product.value.id,
     qty: 1,
   })
