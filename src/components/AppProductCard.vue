@@ -33,9 +33,8 @@
       <div class="flex items-center justify-between mt-auto pt-4">
         <span class="text-xl font-bold text-indigo-600">{{ product.price }}$</span>
 
-        <!-- <AppProductCounter /> -->
-
-        <AppButton :aria-label="`Add ${product.name} to cart`" @click.stop.prevent="add()">
+        <AppProductCounter v-if="inCart" :item="product" />
+        <AppButton v-else :aria-label="`Add ${product.name} to cart`" @click.stop.prevent="add()">
           В корзину
         </AppButton>
       </div>
@@ -45,20 +44,24 @@
 
 <script setup lang="ts">
 import type { ProductItem } from '@/api/types/products'
-import { toRefs } from 'vue'
-import AppProductCounter from './AppProductCounter.vue'
+import { computed, toRefs } from 'vue'
 import AppButton from './AppButton.vue'
 import { useCart } from '@/store/useCart'
+import { storeToRefs } from 'pinia'
+import AppProductCounter from './AppProductCounter.vue'
 
 const props = defineProps<{
   product: ProductItem
 }>()
 
 const { product } = toRefs(props)
-const cart = useCart();
+const cartStore = useCart()
+const { cart } = storeToRefs(cartStore)
+
+const inCart = computed(() => cart?.value?.items.some((item) => item.id === product.value.id))
 
 const add = async () => {
-  await cart.add({
+  await cartStore.add({
     id: product.value.id,
     qty: 1,
   })

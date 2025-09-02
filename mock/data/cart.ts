@@ -47,6 +47,11 @@ export const updateCartItem = (params: AddToCartRequest): CartProduct | null => 
   const { id, qty = 1 } = params
 
   if (!cart.has(id)) {
+    throw new Error('Product not found')
+  }
+
+  if (qty <= 0) {
+    cart.delete(id)
     return null
   }
 

@@ -17,6 +17,6 @@ export async function removeFromCart(id: number): Promise<Cart> {
 }
 
 export async function updateCartItem(data: UpdateCartRequest): Promise<Cart> {
-  const res = await http.post('/cart/remove', data)
+  const res = await http.post('/cart/update', data)
   return res.data
 }
