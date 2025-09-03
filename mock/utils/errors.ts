@@ -1,0 +1,34 @@
+import { ServerResponse } from 'http'
+import { DataErrorType, ErrorDetails } from '../types/errors'
+
+export const DATA_ERRORS_COLLECTION = {
+  [DataErrorType.PRODUCT_NOT_FOUND]: {
+    error: DataErrorType.PRODUCT_NOT_FOUND,
+    code: 404,
+    message: 'Product not found',
+  } as ErrorDetails,
+}
+
+export class DataError extends Error {
+  public details: ErrorDetails
+
+  constructor(err: DataErrorType) {
+    const errDetails = DATA_ERRORS_COLLECTION[err]
+    super(errDetails.message)
+    this.name = 'DataError'
+    this.details = errDetails
+  }
+}
+
+export function ApiErrorResponse(res: ServerResponse, err: DataErrorType) {
+  const errDetails = DATA_ERRORS_COLLECTION[err]
+
+  res.statusCode = errDetails.code
+  res.end(
+    JSON.stringify({
+      message: errDetails.message,
+      error: errDetails.error,
+    }),
+  )
+  return
+}

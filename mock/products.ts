@@ -3,6 +3,8 @@ import { products } from './data/products'
 import { IncomingMessage, ServerResponse } from 'http'
 import { ProductsListRequest } from './types/products'
 import { checkAuth } from './guqrds/auth'
+import { ApiErrorResponse } from './utils/errors'
+import { DataErrorType } from './types/errors'
 
 export default [
   {
@@ -34,7 +36,7 @@ export default [
   {
     url: '/api/products/:id',
     method: 'get',
-    rawResponse: async (req, res) => {
+    rawResponse: async (req: IncomingMessage, res: ServerResponse) => {
       if (!checkAuth(req, res)) return
 
       const id = Number(req.url?.split('/').pop())
@@ -43,8 +45,7 @@ export default [
       res.setHeader('Content-Type', 'application/json')
 
       if (!product) {
-        res.statusCode = 404
-        res.end(JSON.stringify({ message: 'Product not found' }))
+        ApiErrorResponse(res, DataErrorType.PRODUCT_NOT_FOUND)
         return
       }
 

@@ -1,4 +1,6 @@
 import { AddToCartRequest, Cart, CartProduct } from '../types/cart'
+import { DataErrorType } from '../types/errors'
+import { DataError } from '../utils/errors'
 import { products } from './products'
 
 const cart = new Map<number, CartProduct>()
@@ -31,7 +33,7 @@ export const addToCart = (params: AddToCartRequest): CartProduct => {
   const newItem = products.find((p) => p.id === id)
 
   if (!newItem) {
-    throw new Error('Product not found')
+    throw new DataError(DataErrorType.PRODUCT_NOT_FOUND)
   }
 
   const cartItem: CartProduct = { ...newItem, qty } as CartProduct
@@ -47,7 +49,7 @@ export const updateCartItem = (params: AddToCartRequest): CartProduct | null => 
   const { id, qty = 1 } = params
 
   if (!cart.has(id)) {
-    throw new Error('Product not found')
+    throw new DataError(DataErrorType.PRODUCT_NOT_FOUND)
   }
 
   if (qty <= 0) {
