@@ -1,7 +1,7 @@
 import type { AddToCartRequest, Cart } from '@/api/types/cart'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import { addToCart, getCart, removeFromCart, updateCartItem } from '@/api/endpoints/cart'
+import { addToCart, clearCart, getCart, removeFromCart, updateCartItem } from '@/api/endpoints/cart'
 
 export const useCart = defineStore('cart', () => {
   const cart = ref<Cart | null>(null)
@@ -51,6 +51,11 @@ export const useCart = defineStore('cart', () => {
     return cart.value?.items.find((item) => item.id === id)
   }
 
+  const clear = async () => {
+    await clearCart()
+    cart.value = null
+  }
+
   const getQtyById = computed(() => {
     return (id: number) => {
       const item = cart.value?.items.find((i) => i.id === id)
@@ -71,5 +76,6 @@ export const useCart = defineStore('cart', () => {
     getItem,
     update,
     remove,
+    clear,
   }
 })

@@ -12,6 +12,16 @@ export const DATA_ERRORS_COLLECTION: { [key: string]: ErrorDetails } = {
     code: 409,
     message: 'Out of stock',
   },
+  [DataErrorType.CART_OUTDATED]: {
+    error: DataErrorType.CART_OUTDATED,
+    code: 409,
+    message: 'Cart is outdated',
+  },
+  [DataErrorType.INVALID_CUSTOMER]: {
+    error: DataErrorType.INVALID_CUSTOMER,
+    code: 422,
+    message: 'Invalid customer data',
+  },
 }
 
 export class DataError extends Error {

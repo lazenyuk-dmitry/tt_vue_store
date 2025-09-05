@@ -10,7 +10,10 @@
       </div>
 
       <!-- пустая корзина -->
-      <p v-else class="text-gray-600">Корзина пуста</p>
+      <div v-else>
+        <h3 class="text-gray-500">Корзина пуста</h3>
+        <RouterLink to="/" class="mt-3 inline-block"> На главную </RouterLink>
+      </div>
 
       <!-- итог -->
       <div v-if="cartLength > 0" class="mt-8 border-t pt-4">

@@ -20,3 +20,8 @@ export async function updateCartItem(data: UpdateCartRequest): Promise<Cart> {
   const res = await http.post('/cart/update', data)
   return res.data
 }
+
+export async function clearCart(): Promise<unknown> {
+  const res = await http.post('/cart/clear')
+  return res.data
+}
