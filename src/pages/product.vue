@@ -27,23 +27,26 @@
 
           <!-- Теги -->
           <div class="flex flex-wrap gap-2 mb-6">
-            <span
+            <AppProductTag
               v-for="tag in product.tags"
               :key="tag"
               class="bg-gray-200 px-3 py-1 rounded-full text-sm"
             >
               {{ tag }}
-            </span>
+            </AppProductTag>
           </div>
 
           <!-- Кнопки -->
           <div class="flex gap-4">
-            <button
-              class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition disabled:bg-gray-400"
+            <AppProductCounter v-if="inCart" :item="product" />
+            <AppButton
+              v-else
               :disabled="!product.inStock"
+              :aria-label="`Add ${product.name} to cart`"
+              @click.stop.prevent="add()"
             >
               В корзину
-            </button>
+            </AppButton>
             <router-link to="/" class="px-6 py-2 border rounded-lg hover:bg-gray-100 transition">
               Назад
             </router-link>
@@ -58,8 +61,13 @@
 
 <script setup lang="ts">
 import { getProduct } from '@/api/endpoints/products'
+import AppButton from '@/components/AppButton.vue'
+import AppProductCounter from '@/components/AppProductCounter.vue'
+import AppProductTag from '@/components/AppProductTag.vue'
 import InnerPageLayout from '@/layouts/InnerPageLayout.vue'
-import { onMounted, ref } from 'vue'
+import { useCart } from '@/store/useCart'
+import { storeToRefs } from 'pinia'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 interface Product {
@@ -72,14 +80,29 @@ interface Product {
   image: string
 }
 
-const route = useRoute()
+const props = defineProps<{
+  id: number
+}>()
+
 const product = ref<Product | null>(null)
 const loading = ref(true)
+const cartStore = useCart()
+const { cart } = storeToRefs(cartStore)
+
+const inCart = computed(() => cart?.value?.items.some((item) => item.id === product.value?.id))
+
+const add = async () => {
+  if (product.value) {
+    await cartStore.add({
+      id: product.value.id,
+      qty: 1,
+    })
+  }
+}
 
 onMounted(async () => {
   try {
-    const { id } = route.params
-    const res = await getProduct(id)
+    const res = await getProduct(props.id)
     product.value = res
   } catch (err) {
     console.error(err)

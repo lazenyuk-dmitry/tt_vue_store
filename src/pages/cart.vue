@@ -33,15 +33,14 @@ import AppCartItem from '@/components/AppCartItem.vue'
 import InnerPageLayout from '@/layouts/InnerPageLayout.vue'
 import { useCart } from '@/store/useCart'
 import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 const cartStore = useCart()
 
 const { cart, cartLength, totalSum } = storeToRefs(cartStore)
-
-const comment = ref('')
+const router = useRouter()
 
 function checkout() {
-  alert(`Заказ оформлен!\nКомментарий: ${comment.value || 'без комментария'}`)
+  router.push({ name: 'checkout' })
 }
 </script>

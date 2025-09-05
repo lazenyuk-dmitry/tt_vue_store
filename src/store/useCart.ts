@@ -1,7 +1,7 @@
 import type { AddToCartRequest, Cart } from '@/api/types/cart'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import { addToCart, getCart, updateCartItem } from '@/api/endpoints/cart'
+import { addToCart, getCart, removeFromCart, updateCartItem } from '@/api/endpoints/cart'
 
 export const useCart = defineStore('cart', () => {
   const cart = ref<Cart | null>(null)
@@ -27,6 +27,12 @@ export const useCart = defineStore('cart', () => {
 
   const add = async (data: AddToCartRequest) => {
     const updatedCart = await addToCart(data)
+    cart.value = updatedCart
+    return updatedCart
+  }
+
+  const remove = async (id: number) => {
+    const updatedCart = await removeFromCart(id)
     cart.value = updatedCart
     return updatedCart
   }
@@ -64,5 +70,6 @@ export const useCart = defineStore('cart', () => {
     has,
     getItem,
     update,
+    remove,
   }
 })

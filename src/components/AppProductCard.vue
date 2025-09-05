@@ -11,7 +11,7 @@
       <!-- rarity -->
       <p class="text-sm text-gray-500">
         Rarity:
-        <span class="font-medium text-gray-800">{{ product.rarity }}</span>
+        <span class="font-medium text-gray-800 capitalize">{{ product.rarity }}</span>
       </p>
 
       <!-- inStock -->
@@ -21,20 +21,25 @@
 
       <!-- tags -->
       <div class="mt-2 flex flex-wrap gap-2">
-        <span
+        <AppProductTag
           v-for="tag in product.tags"
           :key="tag"
           class="px-2 py-1 text-xs rounded bg-gray-100 text-gray-700"
         >
           {{ tag }}
-        </span>
+        </AppProductTag>
       </div>
 
       <div class="flex items-center justify-between mt-auto pt-4">
         <span class="text-xl font-bold text-indigo-600">{{ product.price }}$</span>
 
         <AppProductCounter v-if="inCart" :item="product" />
-        <AppButton v-else :aria-label="`Add ${product.name} to cart`" @click.stop.prevent="add()">
+        <AppButton
+          v-else
+          :disabled="!product.inStock"
+          :aria-label="`Add ${product.name} to cart`"
+          @click.stop.prevent="add()"
+        >
           В корзину
         </AppButton>
       </div>
@@ -49,6 +54,7 @@ import AppButton from './AppButton.vue'
 import { useCart } from '@/store/useCart'
 import { storeToRefs } from 'pinia'
 import AppProductCounter from './AppProductCounter.vue'
+import AppProductTag from './AppProductTag.vue'
 
 const props = defineProps<{
   product: ProductItem

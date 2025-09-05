@@ -2,14 +2,14 @@
   <div class="inline-flex items-center rounded-lg overflow-hidden border border-gray-300">
     <button
       @click.stop.prevent="decrease()"
-      class="w-8 h-8 flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-lg font-bold"
+      class="w-8 min-h-8 h-full flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-lg font-bold"
     >
       -
     </button>
     <span class="w-10 text-center font-medium bg-white">{{ getQtyById(item.id) }}</span>
     <button
       @click.stop.prevent="increase()"
-      class="w-8 h-8 flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-lg font-bold"
+      class="w-8 min-h-8 h-full flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-lg font-bold"
     >
       +
     </button>

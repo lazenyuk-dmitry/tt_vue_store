@@ -16,19 +16,17 @@
 
       <div v-else>
         <!-- Товары -->
-        <div v-if="cart.length" class="mb-6 space-y-4">
+        <div v-if="cart?.items.length" class="mb-6 space-y-4">
           <h2 class="text-xl font-semibold">Ваш заказ</h2>
-          <div
-            v-for="item in cart"
-            :key="item.id"
-            class="flex items-center justify-between border rounded-lg p-3"
-          >
-            <div>
-              <p class="font-medium">{{ item.name }}</p>
-              <p class="text-sm text-gray-500">Кол-во: {{ item.quantity }} × {{ item.price }}₸</p>
-            </div>
-            <p class="font-semibold">{{ item.price * item.quantity }}₸</p>
+          <div class="flex gap-4 flex-wrap">
+            <AppCheckoutItem
+              v-for="item in cart.items"
+              class="w-full sm:w-[calc(50%-(--spacing(2)))] md:w-[calc(33.333%-(--spacing(3)))]"
+              :item="item"
+              :key="item.id"
+            />
           </div>
+
           <div class="flex justify-between font-bold text-lg border-t pt-3">
             <span>Итого:</span>
             <span>{{ total }}₸</span>
@@ -60,7 +58,7 @@
           <button
             type="submit"
             class="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition"
-            :disabled="!cart.length"
+            :disabled="!cart?.items.length"
           >
             Отправить заказ
           </button>
@@ -71,7 +69,10 @@
 </template>
 
 <script setup lang="ts">
+import AppCheckoutItem from '@/components/AppCheckoutItem.vue'
 import InnerPageLayout from '@/layouts/InnerPageLayout.vue'
+import { useCart } from '@/store/useCart'
+import { storeToRefs } from 'pinia'
 import { ref, computed } from 'vue'
 import { RouterLink } from 'vue-router'
 
@@ -80,19 +81,12 @@ const comment = ref('')
 const success = ref(false)
 const orderId = ref<number | null>(null)
 
-// Просто захардкоженные данные корзины
-const cart = ref([
-  { id: 1, name: 'AK-47 | Redline', price: 12000, quantity: 1 },
-  { id: 2, name: 'AWP | Asiimov', price: 25000, quantity: 2 },
-  { id: 3, name: 'Karambit | Doppler', price: 100000, quantity: 1 },
-])
+const cartStore = useCart()
+const { cart } = storeToRefs(cartStore)
 
-const total = computed(() => cart.value.reduce((sum, item) => sum + item.price * item.quantity, 0))
+const total = computed(() =>
+  cart.value?.items.reduce((sum, item) => sum + item.price * item.qty, 0),
+)
 
-function submitOrder() {
-  if (!cart.value.length) return
-  orderId.value = Math.floor(10000 + Math.random() * 90000)
-  success.value = true
-  cart.value = []
-}
+function submitOrder() {}
 </script>
