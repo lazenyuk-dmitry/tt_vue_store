@@ -26,4 +26,13 @@
   button {
     @apply cursor-pointer;
   }
+
+  input,
+  select {
+    @apply border border-gray-400 rounded-lg py-2 px-3 outline-none;
+  }
+
+  select {
+    @apply pr-0;
+  }
 }
