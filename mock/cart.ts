@@ -3,7 +3,7 @@ import { parseRawRequest } from './utils'
 import { addToCart, clearCart, getFullCartData, removeFromCart, updateCartItem } from './data/cart'
 import { MockMethod } from 'vite-plugin-mock'
 import { AddToCartRequest } from './types/cart'
-import { DataErrorType, ErrorDetails } from './types/errors'
+import { DataErrorType } from './types/errors'
 import { ApiErrorResponse as apiErrorResponse, DataError } from './utils/errors'
 
 export default [

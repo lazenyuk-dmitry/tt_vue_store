@@ -1,12 +1,17 @@
 import { ServerResponse } from 'http'
 import { DataErrorType, ErrorDetails } from '../types/errors'
 
-export const DATA_ERRORS_COLLECTION = {
+export const DATA_ERRORS_COLLECTION: { [key: string]: ErrorDetails } = {
   [DataErrorType.PRODUCT_NOT_FOUND]: {
     error: DataErrorType.PRODUCT_NOT_FOUND,
     code: 404,
     message: 'Product not found',
-  } as ErrorDetails,
+  },
+  [DataErrorType.OUT_OF_STOCK]: {
+    error: DataErrorType.OUT_OF_STOCK,
+    code: 409,
+    message: 'Out of stock',
+  },
 }
 
 export class DataError extends Error {

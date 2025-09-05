@@ -86,12 +86,16 @@ function generateNames(count: number): string[] {
   return Array.from(names)
 }
 
-export const products: Product[] = generateNames(getRandomInt(50, 100)).map((name, i) => ({
-  id: i + 1,
-  name,
-  price: getRandomInt(20, 1000),
-  rarity: rarities[getRandomInt(0, rarities.length - 1)],
-  inStock: Math.random() > 0.2,
-  tags: randomTags(),
-  image: randomImage(i + 1),
-}))
+if (!(globalThis as any)._mockProducts) {
+  (globalThis as any)._mockProducts = generateNames(getRandomInt(50, 100)).map((name, i) => ({
+    id: i + 1,
+    name,
+    price: getRandomInt(20, 1000),
+    rarity: rarities[getRandomInt(0, rarities.length - 1)],
+    inStock: Math.random() > 0.2,
+    tags: randomTags(),
+    image: randomImage(i + 1),
+  }))
+}
+
+export const products: Product[] = (globalThis as any)._mockProducts

@@ -3,7 +3,11 @@ import { DataErrorType } from '../types/errors'
 import { DataError } from '../utils/errors'
 import { products } from './products'
 
-const cart = new Map<number, CartProduct>()
+if (!(globalThis as any)._mockCart) {
+  ;(globalThis as any)._mockCart = new Map<number, CartProduct>()
+}
+
+const cart = (globalThis as any)._mockCart as Map<number, CartProduct>
 
 export const getCartItems = () => {
   return Array.from(cart.values())
@@ -34,6 +38,10 @@ export const addToCart = (params: AddToCartRequest): CartProduct => {
 
   if (!newItem) {
     throw new DataError(DataErrorType.PRODUCT_NOT_FOUND)
+  }
+
+  if (!newItem.inStock) {
+    throw new DataError(DataErrorType.OUT_OF_STOCK)
   }
 
   const cartItem: CartProduct = { ...newItem, qty } as CartProduct
