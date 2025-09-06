@@ -5,6 +5,7 @@ import { ProductsListRequest } from './types/products'
 import { checkAuth } from './guqrds/auth'
 import { ApiErrorResponse } from './utils/errors'
 import { DataErrorType } from './types/errors'
+import { randomDelayPromise } from './utils/delay'
 
 export default [
   {
@@ -13,19 +14,24 @@ export default [
     rawResponse: async (req: IncomingMessage, res: ServerResponse) => {
       if (!checkAuth(req, res)) return
 
+      await randomDelayPromise()
+
       const url = new URL(req.url!, 'http://localhost')
       const params = Object.fromEntries(
         url.searchParams.entries(),
       ) as unknown as ProductsListRequest
 
-      const { page = 1, limit = 20 } = params
+      const page = Number(params.page) || 1
+      const limit = Number(params.limit) || 20
+      const start = (page - 1) * limit
+      const items = products.slice(start, start + limit)
 
       res.setHeader('Content-Type', 'application/json')
 
       res.statusCode = 200
       res.end(
         JSON.stringify({
-          items: products.slice((page - 1) * limit, limit),
+          items,
           total: products.length,
           page,
           limit,
@@ -38,6 +44,7 @@ export default [
     method: 'get',
     rawResponse: async (req: IncomingMessage, res: ServerResponse) => {
       if (!checkAuth(req, res)) return
+      await randomDelayPromise()
 
       const id = Number(req.url?.split('/').pop())
       const product = products.find((p) => p.id === id)

@@ -12,18 +12,18 @@ export interface ProductItem {
 
 export interface ProductsListResponse {
   items: ProductItem[]
-  total: 87
-  page: 1
-  limit: 20
+  total: number
+  page: number
+  limit: number
 }
 
 export interface ProductsListParams {
-  q: string
-  min: number
-  max: number
-  inStock: boolean
-  rarity: Rarity
-  sort: 'price_asc' | 'price_desc'
-  page: number
-  limit: number
+  q?: string
+  min?: number
+  max?: number
+  inStock?: boolean
+  rarity?: Rarity
+  sort?: 'price_asc' | 'price_desc'
+  page?: number
+  limit?: number
 }

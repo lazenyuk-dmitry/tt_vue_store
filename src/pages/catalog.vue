@@ -14,21 +14,22 @@
       <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         <AppProductCard v-for="p in products" :key="p.id" :product="p" />
       </div>
+
+      <div id="sentinel" class="h-4 mt-10 flex items-center justify-center text-gray-500">
+        <span v-if="isLoading">Загрузка...</span>
+      </div>
     </div>
   </InnerPageLayout>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { getAllProducts } from '@/api/endpoints/products'
-import type { ProductItem } from '@/api/types/products'
+import { onBeforeUnmount, onMounted, onUnmounted, ref, toRefs } from 'vue'
 import InnerPageLayout from '@/layouts/InnerPageLayout.vue'
 import AppProductCard from '@/components/AppProductCard.vue'
 import TheCatalogFilters from '@/components/TheCatalogFilters.vue'
 import AppSearchInput from '@/components/AppSearchInput.vue'
 import AppSelect from '@/components/AppSelect.vue'
-
-const products = ref<ProductItem[]>([])
+import { useCatalog } from '@/composables/useCatalog'
 
 const sorting = ref('')
 const sortOptions = [
@@ -36,10 +37,23 @@ const sortOptions = [
   { value: 'price_asc', label: 'Цена ↑' },
   { value: 'price_desc', label: 'Цена ↓' },
 ]
+let observer: IntersectionObserver | null = null
 
-onMounted(async () => {
-  const data = await getAllProducts()
-  products.value = data.items
+const catalog = useCatalog()
+const { products, isLoading } = toRefs(catalog)
+
+onMounted(() => {
+  observer = new IntersectionObserver(([entry]) => {
+    if (entry.isIntersecting) {
+      catalog.loadMore()
+    }
+  })
+  const sentinel = document.querySelector('#sentinel')
+  if (sentinel) observer.observe(sentinel)
+})
+
+onBeforeUnmount(() => {
+  if (observer) observer.disconnect()
 })
 </script>
 
