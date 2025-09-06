@@ -11,12 +11,12 @@ export interface Product {
 }
 
 export interface ProductsListRequest {
-  q: string
-  min: number
-  max: number
-  inStock: boolean
-  rarity: Rarity
-  sort: 'price_asc' | 'price_desc'
+  q?: string
+  min?: number
+  max?: number
+  inStock?: boolean
+  rarity?: Rarity
+  sort?: 'price_asc' | 'price_desc'
   page: number
   limit: number
 }

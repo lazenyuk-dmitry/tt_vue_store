@@ -7,6 +7,9 @@
       <div class="flex items-center my-6 gap-4">
         <AppSearchInput class="flex-auto" />
         <AppSelect class="w-[100px]" v-model="sorting" :options="sortOptions" />
+        <AppCheckbox v-model="inStock" name="inStock" class="whitespace-nowrap">
+          В наличии
+        </AppCheckbox>
       </div>
 
       <!-- <TheCatalogFilters class="mb-6" /> -->
@@ -23,13 +26,14 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, onUnmounted, ref, toRefs } from 'vue'
+import { onBeforeUnmount, onMounted, ref, toRefs } from 'vue'
 import InnerPageLayout from '@/layouts/InnerPageLayout.vue'
 import AppProductCard from '@/components/AppProductCard.vue'
 import TheCatalogFilters from '@/components/TheCatalogFilters.vue'
 import AppSearchInput from '@/components/AppSearchInput.vue'
 import AppSelect from '@/components/AppSelect.vue'
 import { useCatalog } from '@/composables/useCatalog'
+import AppCheckbox from '@/components/AppCheckbox.vue'
 
 const sorting = ref('')
 const sortOptions = [
@@ -37,6 +41,7 @@ const sortOptions = [
   { value: 'price_asc', label: 'Цена ↑' },
   { value: 'price_desc', label: 'Цена ↓' },
 ]
+const inStock = ref(false)
 let observer: IntersectionObserver | null = null
 
 const catalog = useCatalog()

@@ -1,5 +1,5 @@
 import type { MockMethod } from 'vite-plugin-mock'
-import { products } from './data/products'
+import { getProducts, products } from './data/products'
 import { IncomingMessage, ServerResponse } from 'http'
 import { ProductsListRequest } from './types/products'
 import { checkAuth } from './guqrds/auth'
@@ -16,15 +16,25 @@ export default [
 
       await randomDelayPromise()
 
-      const url = new URL(req.url!, 'http://localhost')
-      const params = Object.fromEntries(
-        url.searchParams.entries(),
-      ) as unknown as ProductsListRequest
+      const { searchParams } = new URL(req.url!, 'http://localhost')
+      const params = {
+        q: searchParams.get('q'),
+        min: Number(searchParams.get('min')),
+        max: Number(searchParams.get('max')),
+        inStock: searchParams.get('inStock')
+          ? JSON.parse(JSON.stringify(searchParams.get('inStock')))
+          : null,
+        rarity: searchParams.get('rarity'),
+        sort: searchParams.get('sort'),
+        page: Number(searchParams.get('page')) || 1,
+        limit: Number(searchParams.get('limit')) || 20,
+      } as ProductsListRequest
 
-      const page = Number(params.page) || 1
-      const limit = Number(params.limit) || 20
+      console.log('Params:', params.inStock)
+
+      const { page = 1, limit } = params
       const start = (page - 1) * limit
-      const items = products.slice(start, start + limit)
+      const items = getProducts(params).slice(start, start + limit)
 
       res.setHeader('Content-Type', 'application/json')
 

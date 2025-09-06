@@ -1,5 +1,6 @@
 import { Product, Rarity } from '../types/products'
 import { getRandomFromArray, getRandomInt } from '../utils'
+import { ProductsListRequest } from '../types/products'
 
 const rarities: Rarity[] = [
   'consumer',
@@ -87,7 +88,7 @@ function generateNames(count: number): string[] {
 }
 
 if (!(globalThis as any)._mockProducts) {
-  (globalThis as any)._mockProducts = generateNames(getRandomInt(50, 100)).map((name, i) => ({
+  ;(globalThis as any)._mockProducts = generateNames(getRandomInt(50, 100)).map((name, i) => ({
     id: i + 1,
     name,
     price: getRandomInt(20, 1000),
@@ -99,3 +100,36 @@ if (!(globalThis as any)._mockProducts) {
 }
 
 export const products: Product[] = (globalThis as any)._mockProducts
+
+export function getProducts(params: ProductsListRequest) {
+  let result = [...products]
+
+  if (params.q) {
+    const q = String(params.q).toLowerCase()
+    result = result.filter((p) => p.name.toLowerCase().includes(q))
+  }
+
+  if (params.min) {
+    result = result.filter((p) => p.price >= Number(params.min))
+  }
+  if (params.max) {
+    result = result.filter((p) => p.price <= Number(params.max))
+  }
+
+  if (params.inStock !== null && params.inStock !== undefined) {
+    result = result.filter((p) => p.inStock === params.inStock)
+  }
+
+  if (params.rarity) {
+    result = result.filter((p) => p.rarity === params.rarity)
+  }
+
+  if (params.sort === 'price_asc') {
+    result = result.sort((a, b) => a.price - b.price)
+  }
+  if (params.sort === 'price_desc') {
+    result = result.sort((a, b) => b.price - a.price)
+  }
+
+  return result
+}
