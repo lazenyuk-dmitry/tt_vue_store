@@ -6,6 +6,9 @@ set -e
 # build
 npm run build
 
+# copy 404.html to support client-side routing on GitHub Pages
+cp ./404.html dist/404.html
+
 # navigate into the build output directory
 cd dist
 
