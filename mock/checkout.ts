@@ -1,41 +1,35 @@
-import type { IncomingMessage, ServerResponse } from 'http'
-import { parseRawRequest } from './utils'
 import type { MockMethod } from 'vite-plugin-mock'
 import type { CheckoutRequest, CheckoutResponse } from './types/checkout'
-import { ApiErrorResponse } from './utils/errors'
 import { DataErrorType } from './types/errors'
+import { Response } from './types'
+import { ApiErrorResponse } from './utils/errors'
 
 export default [
   {
     url: '/api/checkout',
     method: 'post',
-    rawResponse: async (req: IncomingMessage, res: ServerResponse) => {
-      const redData = await parseRawRequest(req)
-      const { customer, cart } = redData as CheckoutRequest
-
-      res.setHeader('Content-Type', 'application/json')
+    response: ({ body }: { body: CheckoutRequest }): Response<CheckoutResponse> => {
+      const { customer, cart } = body
 
       if (customer.name.length === 0) {
-        ApiErrorResponse(res, DataErrorType.INVALID_CUSTOMER)
-        return
+        return ApiErrorResponse(DataErrorType.INVALID_CUSTOMER)
       }
 
       if (cart.items.length === 0) {
-        ApiErrorResponse(res, DataErrorType.CART_OUTDATED)
-        return
+        return ApiErrorResponse(DataErrorType.CART_OUTDATED)
       }
 
-      res.statusCode = 200
       const date = new Date()
       const orderDate =
         date.getFullYear().toString().padStart(2, '0') +
-        date.getMonth().toString().padStart(2, '0') +
+        (date.getMonth() + 1).toString().padStart(2, '0') +
         date.getDate().toString().padStart(2, '0')
-      res.end(
-        JSON.stringify({
+
+      return {
+        data: {
           orderId: `ORDER-${orderDate}-0001`,
-        } as CheckoutResponse),
-      )
+        }
+      }
     },
   },
 ] as MockMethod[]

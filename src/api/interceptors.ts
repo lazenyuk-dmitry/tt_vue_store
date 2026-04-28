@@ -11,12 +11,23 @@ export function setupInterceptors() {
   })
 
   http.interceptors.response.use(
-    (res) => res,
-    (err) => {
-      if (err.response?.status === 401) {
+    (res) => {
+      const { code, message } = res.data;
+      const isSuccessCode = code >= 200 && code < 300;
+
+      if (code === 401) {
         window.location.href = '/login'
+        return Promise.reject(new Error(message || 'Unauthorized'));
       }
-      return Promise.reject(err)
+
+      if (!isSuccessCode && code !== undefined) {
+        return Promise.reject(new Error(message || 'API Error'));
+      }
+
+      return res;
     },
-  )
+    (err) => {
+      return Promise.reject(err);
+    }
+  );
 }

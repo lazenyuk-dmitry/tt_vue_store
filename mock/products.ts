@@ -1,75 +1,56 @@
 import type { MockMethod } from 'vite-plugin-mock'
 import { getProducts, products } from './data/products'
-import { IncomingMessage, ServerResponse } from 'http'
-import type { ProductsListRequest } from './types/products'
-import { checkAuth } from './guqrds/auth'
-import { ApiErrorResponse } from './utils/errors'
+import type { Product, ProductsListRequest, ProductsListResponse } from './types/products'
 import { DataErrorType } from './types/errors'
-import { randomDelayPromise } from './utils/delay'
+import { Response } from './types'
+import { ApiErrorResponse } from './utils/errors'
 
 export default [
   {
     url: '/api/products',
     method: 'get',
-    rawResponse: async (req: IncomingMessage, res: ServerResponse) => {
-      if (!checkAuth(req, res)) return
-
-      await randomDelayPromise()
-
-      const { searchParams } = new URL(req.url!, 'http://localhost')
+    response: ({ query }: { query: any }): Response<ProductsListResponse> => {
       const params = {
-        q: searchParams.get('q'),
-        min: Number(searchParams.get('min')),
-        max: Number(searchParams.get('max')),
-        inStock: searchParams.get('inStock')
-          ? JSON.parse(JSON.stringify(searchParams.get('inStock')))
-          : null,
-        rarity: searchParams.get('rarity'),
-        sort: searchParams.get('sort'),
-        page: Number(searchParams.get('page')) || 1,
-        limit: Number(searchParams.get('limit')) || 20,
+        q: query.q || null,
+        min: Number(query.min) || 0,
+        max: Number(query.max) || Infinity,
+        inStock: query.inStock !== undefined ? String(query.inStock) === 'true' : null,
+        rarity: query.rarity || null,
+        sort: query.sort || null,
+        page: Number(query.page) || 1,
+        limit: Number(query.limit) || 20,
       } as ProductsListRequest
 
-      console.log('Params:', params.inStock)
-
-      const { page = 1, limit } = params
+      const { page, limit } = params
       const start = (page - 1) * limit
-      const items = getProducts(params).slice(start, start + limit)
 
-      res.setHeader('Content-Type', 'application/json')
+      const filteredProducts = getProducts(params)
+      const items = filteredProducts.slice(start, start + limit)
 
-      res.statusCode = 200
-      res.end(
-        JSON.stringify({
+      return {
+        data: {
           items,
-          total: products.length,
+          total: filteredProducts.length,
           page,
           limit,
-        }),
-      )
+        }
+      }
     },
   },
   {
     url: '/api/products/:id',
     method: 'get',
-    rawResponse: async (req: IncomingMessage, res: ServerResponse) => {
-      if (!checkAuth(req, res)) return
-      await randomDelayPromise()
-
-      const id = Number(req.url?.split('/').pop())
+    response: ({ query }: { query: any }): Response<Product> => {
+      const id = Number(query.id)
       const product = products.find((p) => p.id === id)
 
-      res.setHeader('Content-Type', 'application/json')
-
       if (!product) {
-        ApiErrorResponse(res, DataErrorType.PRODUCT_NOT_FOUND)
-        return
+        return ApiErrorResponse(DataErrorType.PRODUCT_NOT_FOUND)
       }
 
-      res.statusCode = 200
-
-      res.statusCode = 200
-      res.end(JSON.stringify(product))
+      return {
+        data: product
+      }
     },
   },
 ] as MockMethod[]

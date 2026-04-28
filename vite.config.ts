@@ -8,7 +8,7 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: "/tt_vue_store",
+  base: process.env.VITE_BASE_URL || '/',
   plugins: [
     vue(),
     viteMockServe({

@@ -1,106 +1,97 @@
-import type { IncomingMessage, ServerResponse } from 'http'
-import { parseRawRequest } from './utils'
 import { addToCart, clearCart, getFullCartData, removeFromCart, updateCartItem } from './data/cart'
 import type { MockMethod } from 'vite-plugin-mock'
-import type { AddToCartRequest } from './types/cart'
+import type { AddToCartRequest, Cart } from './types/cart'
 import { DataErrorType } from './types/errors'
-import { ApiErrorResponse as apiErrorResponse, DataError } from './utils/errors'
+import { ApiErrorResponse, DataError } from './utils/errors'
+import { Response } from './types'
 
 export default [
   {
     url: '/api/cart',
     method: 'get',
-    rawResponse: async (req: IncomingMessage, res: ServerResponse) => {
-      res.setHeader('Content-Type', 'application/json')
-
-      res.statusCode = 200
-      res.end(JSON.stringify(getFullCartData()))
+    response: (): Response<Cart> => {
+      return {
+        code: 200,
+        data: getFullCartData(),
+      };
     },
   },
   {
     url: '/api/cart/add',
     method: 'post',
-    rawResponse: async (req: IncomingMessage, res: ServerResponse) => {
-      const redData = (await parseRawRequest(req)) as AddToCartRequest
-
+    response: ({ body }: { body: AddToCartRequest }): Response<Cart> => {
       try {
-        addToCart(redData)
+        addToCart(body);
+        return {
+          code: 200,
+          data: getFullCartData(),
+        };
       } catch (err: unknown) {
         if (err instanceof DataError) {
-          apiErrorResponse(res, DataErrorType[err.details.error as DataErrorType])
-          return
+          return ApiErrorResponse(DataErrorType[err.details.error as DataErrorType])
         }
+        return ApiErrorResponse(DataErrorType.INTERNAL_SERVER_ERROR)
       }
-
-      res.setHeader('Content-Type', 'application/json')
-
-      res.statusCode = 200
-      res.end(JSON.stringify(getFullCartData()))
     },
   },
   {
     url: '/api/cart/remove',
     method: 'post',
-    rawResponse: async (req: IncomingMessage, res: ServerResponse) => {
-      const redData = (await parseRawRequest(req)) as { id: number }
-
+    response: ({ body }: { body: { id: number } }): Response<Cart> => {
       try {
-        removeFromCart(redData.id)
+        removeFromCart(body.id);
+        return {
+          code: 200,
+          data: getFullCartData(),
+        };
       } catch (err: unknown) {
         if (err instanceof DataError) {
-          apiErrorResponse(res, DataErrorType[err.details.error as DataErrorType])
-          return
+          return ApiErrorResponse(DataErrorType[err.details.error as DataErrorType])
         }
+        return ApiErrorResponse(DataErrorType.INTERNAL_SERVER_ERROR)
       }
-
-      res.setHeader('Content-Type', 'application/json')
-
-      res.statusCode = 200
-      res.end(JSON.stringify(getFullCartData()))
     },
   },
   {
     url: '/api/cart/update',
     method: 'post',
-    rawResponse: async (req: IncomingMessage, res: ServerResponse) => {
-      const redData = (await parseRawRequest(req)) as AddToCartRequest
-
+    response: ({ body }: { body: AddToCartRequest }): Response<Cart> => {
       try {
-        updateCartItem(redData)
+        updateCartItem(body);
+        return {
+          code: 200,
+          data: getFullCartData(),
+        };
       } catch (err: unknown) {
         if (err instanceof DataError) {
-          apiErrorResponse(res, DataErrorType[err.details.error as DataErrorType])
-          return
+          return {
+            code: 400,
+            message: DataErrorType[err.details.error as DataErrorType],
+          };
         }
+        return ApiErrorResponse(DataErrorType.INTERNAL_SERVER_ERROR)
       }
-
-      res.setHeader('Content-Type', 'application/json')
-
-      res.statusCode = 200
-      res.end(JSON.stringify(getFullCartData()))
     },
   },
   {
     url: '/api/cart/clear',
     method: 'post',
-    rawResponse: async (req: IncomingMessage, res: ServerResponse) => {
+    response: (): Response<never> => {
       try {
-        clearCart()
+        clearCart();
+        return {
+          code: 200,
+          message: 'Cart cleared',
+        };
       } catch (err: unknown) {
         if (err instanceof DataError) {
-          apiErrorResponse(res, DataErrorType[err.details.error as DataErrorType])
-          return
+          return {
+            code: 400,
+            message: DataErrorType[err.details.error as DataErrorType],
+          };
         }
+        return ApiErrorResponse(DataErrorType.INTERNAL_SERVER_ERROR)
       }
-
-      res.setHeader('Content-Type', 'application/json')
-
-      res.statusCode = 200
-      res.end(
-        JSON.stringify({
-          message: 'Cart cleared',
-        }),
-      )
     },
   },
-] as MockMethod[]
+] as MockMethod[];

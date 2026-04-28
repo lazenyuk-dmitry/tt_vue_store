@@ -1,5 +1,5 @@
-import { ServerResponse } from 'http'
 import { DataErrorType, type ErrorDetails } from '../types/errors'
+import { Response } from '../types'
 
 export const DATA_ERRORS_COLLECTION: { [key: string]: ErrorDetails } = {
   [DataErrorType.PRODUCT_NOT_FOUND]: {
@@ -22,6 +22,16 @@ export const DATA_ERRORS_COLLECTION: { [key: string]: ErrorDetails } = {
     code: 422,
     message: 'Invalid customer data',
   },
+  [DataErrorType.INTERNAL_SERVER_ERROR]: {
+    error: DataErrorType.INTERNAL_SERVER_ERROR,
+    code: 500,
+    message: 'Internal server error',
+  },
+  [DataErrorType.INVALID_EMAIL_OR_PASSWORD]: {
+    error: DataErrorType.INVALID_EMAIL_OR_PASSWORD,
+    code: 400,
+    message: 'Wrong password or email',
+  },
 }
 
 export class DataError extends Error {
@@ -35,15 +45,11 @@ export class DataError extends Error {
   }
 }
 
-export function ApiErrorResponse(res: ServerResponse, err: DataErrorType) {
+export function ApiErrorResponse(err: DataErrorType): Response<never> {
   const errDetails = DATA_ERRORS_COLLECTION[err]
-
-  res.statusCode = errDetails.code
-  res.end(
-    JSON.stringify({
-      message: errDetails.message,
-      error: errDetails.error,
-    }),
-  )
-  return
+  return {
+    code: errDetails.code,
+    message: errDetails.message,
+    error: errDetails.error,
+  }
 }
