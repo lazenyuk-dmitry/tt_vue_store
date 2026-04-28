@@ -1,5 +1,5 @@
 import { ServerResponse } from 'http'
-import { DataErrorType, ErrorDetails } from '../types/errors'
+import { DataErrorType, type ErrorDetails } from '../types/errors'
 
 export const DATA_ERRORS_COLLECTION: { [key: string]: ErrorDetails } = {
   [DataErrorType.PRODUCT_NOT_FOUND]: {

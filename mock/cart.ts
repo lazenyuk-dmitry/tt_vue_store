@@ -1,8 +1,8 @@
 import type { IncomingMessage, ServerResponse } from 'http'
 import { parseRawRequest } from './utils'
 import { addToCart, clearCart, getFullCartData, removeFromCart, updateCartItem } from './data/cart'
-import { MockMethod } from 'vite-plugin-mock'
-import { AddToCartRequest } from './types/cart'
+import type { MockMethod } from 'vite-plugin-mock'
+import type { AddToCartRequest } from './types/cart'
 import { DataErrorType } from './types/errors'
 import { ApiErrorResponse as apiErrorResponse, DataError } from './utils/errors'
 

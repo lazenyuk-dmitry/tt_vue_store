@@ -33,7 +33,7 @@
       <div class="flex items-center justify-between mt-auto pt-4">
         <span class="text-xl font-bold text-indigo-600">{{ product.price }}$</span>
 
-        <AppProductCounter v-if="inCart" :item="product" />
+        <AppProductCounter v-if="cartItem" :item="cartItem" />
         <AppButton
           v-else
           :disabled="!product.inStock"
@@ -64,7 +64,7 @@ const { product } = toRefs(props)
 const cartStore = useCart()
 const { cart } = storeToRefs(cartStore)
 
-const inCart = computed(() => cart?.value?.items.some((item) => item.id === product.value.id))
+const cartItem = computed(() => cart?.value?.items.find((p) => p.id === product.value?.id))
 
 const add = async () => {
   await cartStore.add({

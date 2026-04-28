@@ -1,7 +1,7 @@
 import type { MockMethod } from 'vite-plugin-mock'
 import { getProducts, products } from './data/products'
 import { IncomingMessage, ServerResponse } from 'http'
-import { ProductsListRequest } from './types/products'
+import type { ProductsListRequest } from './types/products'
 import { checkAuth } from './guqrds/auth'
 import { ApiErrorResponse } from './utils/errors'
 import { DataErrorType } from './types/errors'

@@ -1,5 +1,5 @@
-import { Currency } from '.'
-import { Product } from './products'
+import type { Currency } from '.'
+import type { Product } from './products'
 
 export interface CartProduct extends Product {
   qty: number

@@ -1,7 +1,7 @@
 import type { IncomingMessage, ServerResponse } from 'http'
 import { parseRawRequest } from './utils'
 import { validToken, user, password as userPassword } from './data/auth'
-import { MockMethod } from 'vite-plugin-mock'
+import type { MockMethod } from 'vite-plugin-mock'
 
 export default [
   {

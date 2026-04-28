@@ -18,13 +18,12 @@
 
 <script setup lang="ts">
 import type { CartProduct } from '@/api/types/cart'
-import type { ProductItem } from '@/api/types/products'
 import { useCart } from '@/store/useCart'
 import { storeToRefs } from 'pinia'
 import { toRefs } from 'vue'
 
 const props = defineProps<{
-  item: ProductItem | CartProduct
+  item: CartProduct
 }>()
 
 const { item } = toRefs(props)

@@ -1,4 +1,4 @@
-import { AddToCartRequest, Cart, CartProduct } from '../types/cart'
+import type { AddToCartRequest, Cart, CartProduct } from '../types/cart'
 import { DataErrorType } from '../types/errors'
 import { DataError } from '../utils/errors'
 import { products } from './products'

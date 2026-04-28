@@ -38,7 +38,7 @@
 
           <!-- Кнопки -->
           <div class="flex gap-4">
-            <AppProductCounter v-if="inCart" :item="product" />
+            <AppProductCounter v-if="cartItem" :item="cartItem" />
             <AppButton
               v-else
               :disabled="!product.inStock"
@@ -61,6 +61,7 @@
 
 <script setup lang="ts">
 import { getProduct } from '@/api/endpoints/products'
+import type { CartProduct } from '@/api/types/cart'
 import AppButton from '@/components/AppButton.vue'
 import AppProductCounter from '@/components/AppProductCounter.vue'
 import AppProductTag from '@/components/AppProductTag.vue'
@@ -68,7 +69,6 @@ import InnerPageLayout from '@/layouts/InnerPageLayout.vue'
 import { useCart } from '@/store/useCart'
 import { storeToRefs } from 'pinia'
 import { computed, onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
 
 interface Product {
   id: number
@@ -89,7 +89,9 @@ const loading = ref(true)
 const cartStore = useCart()
 const { cart } = storeToRefs(cartStore)
 
-const inCart = computed(() => cart?.value?.items.some((item) => item.id === product.value?.id))
+const cartItem = computed(() =>
+  cart?.value?.items.find((p: CartProduct) => p.id === product.value?.id),
+)
 
 const add = async () => {
   if (product.value) {

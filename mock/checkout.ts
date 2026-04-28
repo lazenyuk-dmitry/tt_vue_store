@@ -1,7 +1,7 @@
 import type { IncomingMessage, ServerResponse } from 'http'
 import { parseRawRequest } from './utils'
-import { MockMethod } from 'vite-plugin-mock'
-import { CheckoutRequest, CheckoutResponse } from './types/checkout'
+import type { MockMethod } from 'vite-plugin-mock'
+import type { CheckoutRequest, CheckoutResponse } from './types/checkout'
 import { ApiErrorResponse } from './utils/errors'
 import { DataErrorType } from './types/errors'
 

@@ -1,6 +1,6 @@
-import { Product, Rarity } from '../types/products'
+import type { Product, Rarity } from '../types/products'
 import { getRandomFromArray, getRandomInt } from '../utils'
-import { ProductsListRequest } from '../types/products'
+import type { ProductsListRequest } from '../types/products'
 
 const rarities: Rarity[] = [
   'consumer',
@@ -88,7 +88,7 @@ function generateNames(count: number): string[] {
 }
 
 if (!(globalThis as any)._mockProducts) {
-  ;(globalThis as any)._mockProducts = generateNames(getRandomInt(50, 100)).map((name, i) => ({
+  ; (globalThis as any)._mockProducts = generateNames(getRandomInt(50, 100)).map((name, i) => ({
     id: i + 1,
     name,
     price: getRandomInt(20, 1000),
