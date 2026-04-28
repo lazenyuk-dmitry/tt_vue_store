@@ -27,6 +27,10 @@
           />
         </div>
 
+        <p v-if="errorMessage" class="text-sm text-red-700">
+          {{ errorMessage }}
+        </p>
+
         <AppButton type="submit">Войти</AppButton>
       </form>
 
@@ -52,9 +56,17 @@ const router = useRouter()
 const email = ref('')
 const password = ref('')
 
+const errorMessage = ref('')
+
 const handleLogin = async () => {
-  await auth.signIn({ email: email.value, password: password.value })
-  router.push({ name: 'catalog' })
+  try {
+    await auth.signIn({ email: email.value, password: password.value })
+    errorMessage.value = ''
+    router.push({ name: 'catalog' })
+  } catch (error: any) {
+    errorMessage.value = error?.message
+    throw error
+  }
 }
 </script>
 
