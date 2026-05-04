@@ -11,10 +11,12 @@
     />
 
     <span
-      class="absolute left-1/2 -translate-x-1/2 mt-2 px-2 py-1 text-sm text-white bg-gray-800 rounded-md opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition whitespace-nowrap"
+      class="absolute left-1/2 -translate-x-1/2 p-2 text-sm text-white bg-gray-800 rounded-md opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition whitespace-nowrap"
       role="tooltip"
     >
-      {{ user?.name }}
+      <p class="text-center mb-1">{{ user?.name }}</p>
+
+      <AppButton @click="signOut">Logout</AppButton>
     </span>
   </div>
 </template>
@@ -22,9 +24,14 @@
 <script setup lang="ts">
 import { useAuth } from '@/composables/useAuth'
 import { toRefs } from 'vue'
+import AppButton from './AppButton.vue'
 
 const auth = useAuth()
-const { user } = toRefs(auth)
+const { user, signOut } = toRefs(auth)
+
+setTimeout(() => {
+  console.log(user.value)
+}, 2000)
 </script>
 
 <style scoped></style>

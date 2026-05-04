@@ -1,6 +1,6 @@
 import { validToken, user, password as userPassword } from './data/auth'
 import type { MockMethod } from 'vite-plugin-mock'
-import { LoginRequest, LoginResponse } from './types/auth';
+import { LoginRequest, LoginResponse, User } from './types/auth';
 import { Response } from './types';
 import { DataErrorType } from './types/errors';
 import { ApiErrorResponse } from './utils/errors';
@@ -26,15 +26,21 @@ export default [
     },
   },
   {
-    url: '/api/userinfo',
-    method: 'get',
-    response: (): Response<LoginResponse> => {
+    url: '/api/logout',
+    method: 'post',
+    response: (): Response<never> => {
       return {
         code: 200,
-        data: {
-          token: validToken,
-          user: user,
-        },
+      };
+    },
+  },
+  {
+    url: '/api/userinfo',
+    method: 'get',
+    response: (): Response<User> => {
+      return {
+        code: 200,
+        data: user,
       };
     },
   },
