@@ -1,5 +1,5 @@
 import { DataErrorType, type ErrorDetails } from '../types/errors'
-import { Response } from '../types'
+import type { Response } from '../types'
 
 export const DATA_ERRORS_COLLECTION: { [key: string]: ErrorDetails } = {
   [DataErrorType.PRODUCT_NOT_FOUND]: {

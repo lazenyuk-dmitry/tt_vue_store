@@ -1,64 +1,106 @@
-# vue-project
+# 🛍️ Vue Store (Demo)
 
-This template should help get you started developing with Vue 3 in Vite.
+Демо интернет-магазина на Vue 3 с каталогом, фильтрами, корзиной и оформлением заказа.
+Проект сделан как портфолио с упором на архитектуру, типизацию и работу с API.
 
-## Recommended IDE Setup
+Деплой GitHub Pages через bash скрипт [deploy.sh](deploy.sh) с фиксом для SPA для статичного хостинга.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+[DEMO HERE](https://lazenyuk-dmitry.github.io/tt_vue_store)
 
-## Type Support for `.vue` Imports in TS
+---
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+![Main page](docs/images/main-page.png)
+![Checkout page](docs/images/checkout-page.png)
 
-## Customize configuration
+---
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+## 🚀 Стек
 
-## Project Setup
+- Vue 3 (Composition API)
+- Vite
+- TypeScript
+- TailwindCSS
+- Axios
+- vite-plugin-mock (mock API)
 
-```sh
-npm install
+---
+
+## ✨ Функционал
+
+- 📦 Каталог товаров
+- 🔎 Поиск и фильтры (наличие, сортировка)
+- ♾️ Ленивый скролл (load more)
+- 🛒 Корзина (изменение количества)
+- 🧾 Checkout (оформление заказа)
+- 🔐 Авторизация (mock)
+- ⚡ Имитация API
+
+---
+
+## 📂 Структура проекта
+
+```
+src/
+  api/           # работа с API
+  components/    # UI компоненты
+  pages/         # страницы
+  composables/   # useCatalog, useCart и т.д.
+  router/        # vue-router
+mock/            # mock API (vite-plugin-mock)
 ```
 
-### Compile and Hot-Reload for Development
+## ⚙️ Переменные окружения
 
-```sh
+Создай `.env`:
+
+```bash
+VITE_BASE_URL=/tt_vue_store
+VITE_USE_MOCK=true
+```
+
+---
+
+## ⚙️ Установка и запуск
+
+```bash
+npm install
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+---
 
-```sh
+## 🏗️ Сборка
+
+```bash
 npm run build
 ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+## 🔌 API
 
-```sh
-npm run test:unit
+В проекте используется mock API:
+
+```
+POST   /api/login
+POST   /api/logout
+GET    /api//userinfo
+GET    /api/products
+GET    /api/products/[id]
+GET    /api/cart
+POST   /api/cart/add
+POST   /api/cart/remove
+POST   /api/cart/update
+POST   /api/cart/clear
+POST   /api/checkout
 ```
 
-### Run End-to-End Tests with [Playwright](https://playwright.dev)
+В dev используется `vite-plugin-mock`, в prod — mock подключается в браузере.
 
-```sh
-# Install browsers for the first run
-npx playwright install
+---
 
-# When testing on CI, must build the project first
-npm run build
+## 🧠 Особенности
 
-# Runs the end-to-end tests
-npm run test:e2e
-# Runs the tests only on Chromium
-npm run test:e2e -- --project=chromium
-# Runs the tests of a specific file
-npm run test:e2e -- tests/example.spec.ts
-# Runs the tests in debug mode
-npm run test:e2e -- --debug
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+- Полностью типизированный API слой
+- Разделение Product / CartProduct
+- Composables вместо глобального store
+- Mock сервер для изоляции фронта
+- Подготовка под реальный backend

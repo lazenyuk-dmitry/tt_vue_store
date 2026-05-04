@@ -2,7 +2,7 @@ import type { MockMethod } from 'vite-plugin-mock'
 import { getProducts, products } from './data/products'
 import type { Product, ProductsListRequest, ProductsListResponse } from './types/products'
 import { DataErrorType } from './types/errors'
-import { Response } from './types'
+import type { Response } from './types'
 import { ApiErrorResponse } from './utils/errors'
 
 export default [

@@ -3,7 +3,7 @@ import type { MockMethod } from 'vite-plugin-mock'
 import type { AddToCartRequest, Cart } from './types/cart'
 import { DataErrorType } from './types/errors'
 import { ApiErrorResponse, DataError } from './utils/errors'
-import { Response } from './types'
+import type { Response } from './types'
 
 export default [
   {

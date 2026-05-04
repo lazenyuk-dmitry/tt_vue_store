@@ -1,7 +1,7 @@
 import type { MockMethod } from 'vite-plugin-mock'
 import type { CheckoutRequest, CheckoutResponse } from './types/checkout'
 import { DataErrorType } from './types/errors'
-import { Response } from './types'
+import type { Response } from './types'
 import { ApiErrorResponse } from './utils/errors'
 
 export default [

@@ -1,7 +1,7 @@
 import { validToken, user, password as userPassword } from './data/auth'
 import type { MockMethod } from 'vite-plugin-mock'
-import { LoginRequest, LoginResponse, User } from './types/auth';
-import { Response } from './types';
+import type { LoginRequest, LoginResponse, User } from './types/auth';
+import type { Response } from './types';
 import { DataErrorType } from './types/errors';
 import { ApiErrorResponse } from './utils/errors';
 
