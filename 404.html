@@ -1,0 +1,17 @@
+<!-- 404.html -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <script>
+      // редирект на index.html с сохранением пути
+      const path = window.location.pathname
+      const repo = "/tt_vue_store"
+
+      window.location.replace(
+        repo + "/?redirect=" + path.replace(repo, "")
+      )
+    </script>
+  </head>
+  <body></body>
+</html>
