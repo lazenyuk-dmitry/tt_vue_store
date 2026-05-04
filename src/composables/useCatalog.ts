@@ -1,6 +1,7 @@
 import { getAllProducts } from '@/api/endpoints/products'
-import type { ProductItem } from '@/api/types/products'
-import { ref } from 'vue'
+import type { ProductItem, ProductsListParams } from '@/api/types/products'
+import { debounce } from "perfect-debounce";
+import { reactive, ref, watch } from 'vue'
 
 export function useCatalog() {
   const isLoading = ref(false)
@@ -9,12 +10,21 @@ export function useCatalog() {
   let page = 1
   let total = 0
 
+  const filters = reactive<ProductsListParams>({
+    q: '',
+    inStock: undefined,
+    sort: '',
+  });
+
   const fetch = async () => {
     if (isLoading.value) return
     isLoading.value = true
     const data = await getAllProducts({
       page: page,
       limit: perPage,
+      q: filters.q,
+      inStock: filters.inStock ? true : undefined,
+      sort: filters.sort,
     })
     total = data.total
     isLoading.value = false
@@ -22,9 +32,12 @@ export function useCatalog() {
   }
 
   const load = async () => {
+    page = 1
     const data = await fetch()
     products.value = data?.items || []
   }
+
+  const loadDebounced = debounce(load, 300)
 
   const loadMore = async () => {
     if (products.value.length >= total) return
@@ -37,5 +50,9 @@ export function useCatalog() {
     load()
   }
 
-  return { products, isLoading, fetch, load, loadMore }
+  watch(() => ({ ...filters }), () => {
+    loadDebounced()
+  })
+
+  return { products, isLoading, filters, fetch, load, loadMore }
 }

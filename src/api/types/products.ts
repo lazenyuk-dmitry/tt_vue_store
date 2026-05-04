@@ -1,5 +1,7 @@
 import type { Rarity } from '../../../mock/types/products'
 
+export type OrderType = "price_asc" | "price_desc" | "" | undefined;
+
 export interface ProductItem {
   id: number
   name: string
@@ -23,7 +25,7 @@ export interface ProductsListParams {
   max?: number
   inStock?: boolean
   rarity?: Rarity
-  sort?: 'price_asc' | 'price_desc'
+  sort?: OrderType
   page?: number
   limit?: number
 }

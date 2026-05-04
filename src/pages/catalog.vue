@@ -5,9 +5,9 @@
       <h1 class="text-2xl font-bold mb-6 text-center">Каталог</h1>
 
       <div class="flex items-center my-6 gap-4">
-        <AppSearchInput class="flex-auto" />
-        <AppSelect class="w-[100px]" v-model="sorting" :options="sortOptions" />
-        <AppCheckbox v-model="inStock" name="inStock" class="whitespace-nowrap">
+        <AppSearchInput v-model="filters.q" class="flex-auto" />
+        <AppSelect class="w-[100px]" v-model="filters.sort" :options="sortOptions" />
+        <AppCheckbox v-model="filters.inStock" name="inStock" class="whitespace-nowrap">
           В наличии
         </AppCheckbox>
       </div>
@@ -15,7 +15,12 @@
       <!-- <TheCatalogFilters class="mb-6" /> -->
 
       <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        <AppProductCard v-for="p in products" :key="p.id" :product="p" />
+        <template v-if="products.length">
+          <AppProductCard v-for="p in products" :key="p.id" :product="p" />
+        </template>
+        <div v-else-if="!isLoading" class="col-span-full text-center text-gray-500">
+          Нет товаров, соответствующих вашим критериям.
+        </div>
       </div>
 
       <div id="sentinel" class="h-4 mt-10 flex items-center justify-center text-gray-500">
@@ -35,17 +40,16 @@ import AppSelect from '@/components/AppSelect.vue'
 import { useCatalog } from '@/composables/useCatalog'
 import AppCheckbox from '@/components/AppCheckbox.vue'
 
-const sorting = ref('')
 const sortOptions = [
   { value: '', label: 'Цена ↑↓' },
   { value: 'price_asc', label: 'Цена ↑' },
   { value: 'price_desc', label: 'Цена ↓' },
 ]
-const inStock = ref(false)
+
 let observer: IntersectionObserver | null = null
 
 const catalog = useCatalog()
-const { products, isLoading } = toRefs(catalog)
+const { products, isLoading, filters } = toRefs(catalog)
 
 onMounted(() => {
   observer = new IntersectionObserver(([entry]) => {
